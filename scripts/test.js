@@ -1,6 +1,6 @@
 var canvas, ctx, flag = false,
             leftObjective = [10, 150, 50, 50],
-            rightObjective = [340, 150, 50, 50],
+            rightObjective = [940, 150, 50, 50],
             prevX = 0,
             currX = 0,
             prevY = 0,
@@ -121,11 +121,13 @@ var canvas, ctx, flag = false,
 
                     listX.push(currX);
                     listY.push(currY);
-                    console.log(currX + ", " + currY);
+                    //console.log(currX + ", " + currY);
 
+                    // If End Checkpoint is Reached
                     if (currX >= rightObjective[0] && currX <= (rightObjective[0] + rightObjective[2]) && currY >= rightObjective[1] && currY <= (rightObjective[1] + rightObjective[3])) {
                         ctx.fillStyle = "#00FF00";
                         ctx.fillRect(rightObjective[0], rightObjective[1], rightObjective[2], rightObjective[3]);
+
 
                     }
                 }
