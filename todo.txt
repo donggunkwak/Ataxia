@@ -1,0 +1,5 @@
+3 Tests
+-----------
+Diagonal
+Horizontal
+Vertical
