@@ -1,4 +1,6 @@
 var canvas, ctx, flag = false,
+            leftObjective = [10, 150, 50, 50],
+            rightObjective = [340, 150, 50, 50],
             prevX = 0,
             currX = 0,
             prevY = 0,
@@ -20,10 +22,8 @@ var canvas, ctx, flag = false,
             h = canvas.height;
 
             ctx.fillStyle = "#FF0000";
-            ctx.fillRect(10, 150, 50, 50);
-
-            ctx.fillStyle = "#00FF00";
-            ctx.fillRect(340, 150, 50, 50);
+            ctx.fillRect(leftObjective[0], leftObjective[1], leftObjective[2], leftObjective[3]);
+            ctx.fillRect(rightObjective[0], rightObjective[1], rightObjective[2], rightObjective[3]);
         
             canvas.addEventListener("mousemove", function (e) {
                 findxy('move', e)
@@ -70,14 +70,16 @@ var canvas, ctx, flag = false,
                 60,200
                 */
 
+                //10, 150, 50, 50
+
                 // If Not Started
                 if (!started){
                     // If Click Button
-                    if (currX >= 10 && currX <= 60 && currY >= 150 && currY <= 200){
+                    if (currX >= leftObjective[0] && currX <= (leftObjective[0] + leftObjective[2]) && currY >= leftObjective[1] && currY <= (leftObjective[1] + leftObjective[3])) {
                         started = true;
 
                         ctx.fillStyle = "#00FF00";
-                        ctx.fillRect(10, 150, 50, 50);
+                        ctx.fillRect(leftObjective[0], leftObjective[1], leftObjective[2], leftObjective[3]);
                 }
 
                 else {
@@ -119,7 +121,13 @@ var canvas, ctx, flag = false,
 
                     listX.push(currX);
                     listY.push(currY);
-                    //console.log(currX + ", " + currY);
+                    console.log(currX + ", " + currY);
+
+                    if (currX >= rightObjective[0] && currX <= (rightObjective[0] + rightObjective[2]) && currY >= rightObjective[1] && currY <= (rightObjective[1] + rightObjective[3])) {
+                        ctx.fillStyle = "#00FF00";
+                        ctx.fillRect(rightObjective[0], rightObjective[1], rightObjective[2], rightObjective[3]);
+
+                    }
                 }
             }
         }
