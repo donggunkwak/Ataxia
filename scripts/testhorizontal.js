@@ -11,7 +11,8 @@ var canvas, ctx, flag = false,
             total = 0,
             started = false,
             dot_flag = false;
-    
+            ended = false;
+
         var x = "black",
             y = 2;
         
@@ -62,7 +63,8 @@ var canvas, ctx, flag = false,
             //console.log("Total Errors: " + total);
             //console.log("Total Pre Errors: " + pretotal);
             //console.log(currX + ", " + currY);
-
+            if(ended)
+                return;
 
             // If Mouse Held Down
             if (res == 'down') {
@@ -92,15 +94,17 @@ var canvas, ctx, flag = false,
 
                     else {
                         pretotal += 1;
-                        return;
-                        // Push Failed Attempts/Coords to List
                         listX.push(currX);
                         listY.push(currY);
                         displayList();
+                        return;
+                        // Push Failed Attempts/Coords to List
                     }
 
                 }
-
+                listX.push(currX);
+                listY.push(currY);
+                displayList();
                 flag = true;
                 dot_flag = true;
                 if (dot_flag) {
@@ -125,7 +129,7 @@ var canvas, ctx, flag = false,
                     prevY = currY;
                     currX = e.clientX - canvas.offsetLeft;
                     currY = e.clientY - canvas.offsetTop;
-                    draw();
+                    
 
                     listX.push(currX);
                     listY.push(currY);
@@ -135,9 +139,10 @@ var canvas, ctx, flag = false,
                     if (currX >= rightObjective[0] && currX <= (rightObjective[0] + rightObjective[2]) && currY >= rightObjective[1] && currY <= (rightObjective[1] + rightObjective[3])) {
                         ctx.fillStyle = "#00FF00";
                         ctx.fillRect(rightObjective[0], rightObjective[1], rightObjective[2], rightObjective[3]);
-
+                        ended = true;
 
                     }
+                    draw();
                 }
             }
         }
