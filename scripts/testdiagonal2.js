@@ -1,6 +1,6 @@
-<html>
-    <script type="text/javascript">
-        var canvas, ctx, flag = false,
+var canvas, ctx, flag = false,
+            leftObjective = [10, 340, 50, 50],
+            rightObjective = [940, 10, 50, 50],
             prevX = 0,
             currX = 0,
             prevY = 0,
@@ -22,10 +22,8 @@
             h = canvas.height;
 
             ctx.fillStyle = "#FF0000";
-            ctx.fillRect(10, 150, 50, 50);
-
-            ctx.fillStyle = "#00FF00";
-            ctx.fillRect(340, 150, 50, 50);
+            ctx.fillRect(leftObjective[0], leftObjective[1], leftObjective[2], leftObjective[3]);
+            ctx.fillRect(rightObjective[0], rightObjective[1], rightObjective[2], rightObjective[3]);
         
             canvas.addEventListener("mousemove", function (e) {
                 findxy('move', e)
@@ -72,14 +70,16 @@
                 60,200
                 */
 
+                //10, 150, 50, 50
+
                 // If Not Started
                 if (!started){
                     // If Click Button
-                    if (currX >= 10 && currX <= 60 && currY >= 150 && currY <= 200){
+                    if (currX >= leftObjective[0] && currX <= (leftObjective[0] + leftObjective[2]) && currY >= leftObjective[1] && currY <= (leftObjective[1] + leftObjective[3])) {
                         started = true;
 
                         ctx.fillStyle = "#00FF00";
-                        ctx.fillRect(10, 150, 50, 50);
+                        ctx.fillRect(leftObjective[0], leftObjective[1], leftObjective[2], leftObjective[3]);
                 }
 
                 else {
@@ -122,12 +122,14 @@
                     listX.push(currX);
                     listY.push(currY);
                     //console.log(currX + ", " + currY);
+
+                    // If End Checkpoint is Reached
+                    if (currX >= rightObjective[0] && currX <= (rightObjective[0] + rightObjective[2]) && currY >= rightObjective[1] && currY <= (rightObjective[1] + rightObjective[3])) {
+                        ctx.fillStyle = "#00FF00";
+                        ctx.fillRect(rightObjective[0], rightObjective[1], rightObjective[2], rightObjective[3]);
+
+
+                    }
                 }
             }
         }
-    </script>
-    <body onload="init()">
-        <canvas id="can" width="400" height="400" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
-        <img id="canvasimg" style="position:absolute;top:10%;left:52%;" style="display:none;">
-    </body>
-</html>
