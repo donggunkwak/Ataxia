@@ -42,7 +42,7 @@ var canvas, ctx, flag = false,
         
 
         function displayList(){
-            var e = "<hr/>";
+            var e = "";
             e += " " + listX.length+" "+listY.length+ "<br/>";
             for(var i = 0; i < listX.length; i++){
                 e += " " + listX[i] + " " + listY[i] + "<br/>";
