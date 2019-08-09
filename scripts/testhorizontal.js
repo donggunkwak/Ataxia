@@ -1,6 +1,6 @@
-<html>
-    <script type="text/javascript">
-        var canvas, ctx, flag = false,
+var canvas, ctx, flag = false,
+            leftObjective = [10, 150, 50, 50],
+            rightObjective = [940, 150, 50, 50],
             prevX = 0,
             currX = 0,
             prevY = 0,
@@ -11,7 +11,8 @@
             total = 0,
             started = false,
             dot_flag = false;
-    
+            ended = false;
+
         var x = "black",
             y = 2;
         
@@ -22,10 +23,8 @@
             h = canvas.height;
 
             ctx.fillStyle = "#FF0000";
-            ctx.fillRect(10, 150, 50, 50);
-
-            ctx.fillStyle = "#00FF00";
-            ctx.fillRect(340, 150, 50, 50);
+            ctx.fillRect(leftObjective[0], leftObjective[1], leftObjective[2], leftObjective[3]);
+            ctx.fillRect(rightObjective[0], rightObjective[1], rightObjective[2], rightObjective[3]);
         
             canvas.addEventListener("mousemove", function (e) {
                 findxy('move', e)
@@ -42,7 +41,14 @@
         }
         
 
-        
+        function displayList(){
+            var e = "";
+            e += " " + listX.length+" "+listY.length+ "<br/>";
+            for(var i = 0; i < listX.length; i++){
+                e += " " + listX[i] + " " + listY[i] + "<br/>";
+            }
+            document.getElementById("list").innerHTML = e;
+        }
         function draw() {
             ctx.beginPath();
             ctx.moveTo(prevX, prevY);
@@ -57,6 +63,8 @@
             //console.log("Total Errors: " + total);
             //console.log("Total Pre Errors: " + pretotal);
             //console.log(currX + ", " + currY);
+            if(ended)
+                return;
 
             // If Mouse Held Down
             if (res == 'down') {
@@ -72,27 +80,31 @@
                 60,200
                 */
 
+                //10, 150, 50, 50
+
                 // If Not Started
                 if (!started){
                     // If Click Button
-                    if (currX >= 10 && currX <= 60 && currY >= 150 && currY <= 200){
+                    if (currX >= leftObjective[0] && currX <= (leftObjective[0] + leftObjective[2]) && currY >= leftObjective[1] && currY <= (leftObjective[1] + leftObjective[3])) {
                         started = true;
 
                         ctx.fillStyle = "#00FF00";
-                        ctx.fillRect(10, 150, 50, 50);
+                        ctx.fillRect(leftObjective[0], leftObjective[1], leftObjective[2], leftObjective[3]);
+                    }
+
+                    else {
+                        pretotal += 1;
+                        listX.push(currX);
+                        listY.push(currY);
+                        displayList();
+                        return;
+                        // Push Failed Attempts/Coords to List
+                    }
+
                 }
-
-                else {
-                    pretotal += 1;
-
-                    // Push Failed Attempts/Coords to List
-                    listX.push(currX);
-                    listY.push(currY);
-                    //console.log(currX + ", " + currY);
-                }
-
-                }
-
+                listX.push(currX);
+                listY.push(currY);
+                displayList();
                 flag = true;
                 dot_flag = true;
                 if (dot_flag) {
@@ -117,17 +129,20 @@
                     prevY = currY;
                     currX = e.clientX - canvas.offsetLeft;
                     currY = e.clientY - canvas.offsetTop;
-                    draw();
+                    
 
                     listX.push(currX);
                     listY.push(currY);
-                    //console.log(currX + ", " + currY);
+                    displayList();
+
+                    // If End Checkpoint is Reached
+                    if (currX >= rightObjective[0] && currX <= (rightObjective[0] + rightObjective[2]) && currY >= rightObjective[1] && currY <= (rightObjective[1] + rightObjective[3])) {
+                        ctx.fillStyle = "#00FF00";
+                        ctx.fillRect(rightObjective[0], rightObjective[1], rightObjective[2], rightObjective[3]);
+                        ended = true;
+
+                    }
+                    draw();
                 }
             }
         }
-    </script>
-    <body onload="init()">
-        <canvas id="can" width="400" height="400" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
-        <img id="canvasimg" style="position:absolute;top:10%;left:52%;" style="display:none;">
-    </body>
-</html>
