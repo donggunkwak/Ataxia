@@ -5,6 +5,7 @@
  
 ## Features
 - Line Test (under development)
+- Easy to Access Site (under development)
 
 
 ## To-Do List
