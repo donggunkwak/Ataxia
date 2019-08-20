@@ -9,9 +9,19 @@ var canvas, ctx, flag = false,
             listY = [],
             pretotal = 0,
             total = 0,
+            out = 0,
+            off = 0,
+            maxX = 0,
+            reverse = 0,
+            reverseStart = false,
+            curOff = false,
             started = false,
             dot_flag = false;
             ended = false;
+
+
+            var OptimalY = 0;
+
 
         var x = "black",
             y = 2;
@@ -43,7 +53,7 @@ var canvas, ctx, flag = false,
 
         function displayList(){
             var e = "";
-            e += " " + listX.length+" "+listY.length+ "<br/>";
+            e += " Size: " + listX.length+" "+listY.length+ "<br/>";
             for(var i = 0; i < listX.length; i++){
                 e += " " + listX[i] + " " + listY[i] + "<br/>";
             }
@@ -72,7 +82,7 @@ var canvas, ctx, flag = false,
                 prevY = currY;
                 currX = e.clientX - canvas.offsetLeft;
                 currY = e.clientY - canvas.offsetTop;
-
+                maxX= Math.max(maxX,currX);
                 /*
                 10,150
                 10,200
@@ -90,10 +100,12 @@ var canvas, ctx, flag = false,
 
                         ctx.fillStyle = "#00FF00";
                         ctx.fillRect(leftObjective[0], leftObjective[1], leftObjective[2], leftObjective[3]);
+                        OptimalY = currY;
                     }
 
                     else {
                         pretotal += 1;
+                        document.getElementById("misses").innerHTML = "Before-Start misses: "+pretotal.toString(); 
                         listX.push(currX);
                         listY.push(currY);
                         displayList();
@@ -101,6 +113,16 @@ var canvas, ctx, flag = false,
                         // Push Failed Attempts/Coords to List
                     }
 
+                }
+                if(started&&Math.abs(currY-OptimalY)>20&&curOff==false)
+                {
+                    curOff = true;
+                    off+=1;
+                    document.getElementById("off").innerHTML = "Off-By-20: "+off.toString();
+                }
+                if(curOff==true&&started&&Math.abs(currY-OptimalY)<=20)
+                {
+                    curOff=false;
                 }
                 listX.push(currX);
                 listY.push(currY);
@@ -117,9 +139,19 @@ var canvas, ctx, flag = false,
             }
 
             // If Mouse Not Held Down
-            if (res == 'up' || res == 'out') {
+            if (res == 'up') {
                 flag = false;
-                total += 1;
+                if(started)total += 1;
+                document.getElementById("discontinuities").innerHTML = "Discontinuities: "+total.toString();
+            }
+            if(res=='out')
+            {
+                flag = false;
+                if(started)
+                {
+                    out+=1;
+                    document.getElementById("outofcanvas").innerHTML = "OutOfCanvas: "+out.toString();
+                }
             }
 
             // If Mouse Moves
@@ -129,12 +161,16 @@ var canvas, ctx, flag = false,
                     prevY = currY;
                     currX = e.clientX - canvas.offsetLeft;
                     currY = e.clientY - canvas.offsetTop;
-                    
+                    if(currX>maxX)
+                    {
+                        maxX = currX;
+                        reverseStart = false;
+                    }
 
                     listX.push(currX);
                     listY.push(currY);
                     displayList();
-
+                    
                     // If End Checkpoint is Reached
                     if (currX >= rightObjective[0] && currX <= (rightObjective[0] + rightObjective[2]) && currY >= rightObjective[1] && currY <= (rightObjective[1] + rightObjective[3])) {
                         ctx.fillStyle = "#00FF00";
@@ -143,6 +179,26 @@ var canvas, ctx, flag = false,
 
                     }
                     draw();
+
+
+
+                    if(Math.abs(currY-OptimalY)>20&&curOff==false)
+                    {
+                        curOff = true;
+                        off+=1;
+                        document.getElementById("off").innerHTML = "Off-By-20: "+off.toString();
+                    }
+                    if(curOff==true&&Math.abs(currY-OptimalY)<=20)
+                    {
+                        curOff=false;
+                    }
+                    if(reverseStart==false&&currX<maxX)
+                    {
+                        reverseStart = true;
+                        reverse+=1;
+                        document.getElementById("reverses").innerHTML ="Reverses: "+reverse.toString();
+                    }
+                    
                 }
             }
         }
