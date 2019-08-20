@@ -12,7 +12,20 @@ var canvas, ctx, flag = false,
             started = false,
             dot_flag = false;
             ended = false;
-    
+        var lxmid = 35;
+        var lymid = 35;
+        var rxmid = 965;
+        var rymid = 365;
+        var perfectlistX = [35];
+        var perfectlistY = [35];
+        for(var i = 36;i<965;i++)
+        {
+            perfectlistX.push(i);
+            perfectlistY.push(0.354839*i+22.580645);
+        }
+        perfectlistX.push(965);
+        perfectlistY.push(365);
+
         var x = "black",
             y = 2;
         
@@ -97,6 +110,7 @@ var canvas, ctx, flag = false,
                         listX.push(currX);
                         listY.push(currY);
                         displayList();
+                        
                         return;
                         // Push Failed Attempts/Coords to List
                     }
